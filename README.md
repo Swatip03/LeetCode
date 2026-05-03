@@ -1,6 +1,6 @@
 # ✨ LeetCode Journey
 
-> A personal collection of problems I’ve solved on LeetCode.
+> A personal collection of problems I’ve solved on LeetCode.(!!!All the solution i wrote on my own!!!!)
 
 ---
 
