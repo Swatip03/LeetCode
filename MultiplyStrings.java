@@ -1,87 +1,36 @@
 public class MultiplyStrings {
-    
     public String multiply(String num1, String num2) {
+        int n = num1.length();
+        int m = num2.length();
 
-        int[] nums1 = new int[num1.length()];
-        int[] nums2 = new int[num2.length()];
+        int[] result = new int[m+n];
+        for(int i = n-1 ; i >= 0 ; i-- ){
 
-        for(int i = 0 ;i <nums1.length ; i++){
+            for(int j = m-1 ; j >= 0 ; j--){
 
-            nums1[i] = Character.getNumericValue(num1.charAt(i));
+                int mul = (num1.charAt(i)-'0')*(num2.charAt(j)-'0');
 
-        }
-        
-        for(int i = 0 ;i <nums2.length ; i++){
+                int ones = mul%10;
+                int tens = mul/10;
 
-            nums2[i] = Character.getNumericValue(num2.charAt(i));
-
-        }
-
-        int[] result = new int[nums1.length+nums2.length];
-
-        int carr = 0;
-        int idx = result.length-1;
-
-        for(int i = nums2.length ; i >= 0 ; i--){
-
-            int ival = i;
-
-            for(int j = nums1.length ; j >= 0 ; j--){
-
-                int jval = j;
-
-                int prod = ival*jval + carr;
-
-                result[idx] = prod % 10;
-                carr = prod / 10;
-                idx--;
-
+                result[i+j+1] += ones;
+                result[i+j]+=tens;
             }
-
         }
 
+        //handle the two digit number in the array ie the carry from right to left
+        for(int k = m+n-1 ; k > 0 ; k--){
+            result[k-1]+=result[k]/10;
+            result[k]+=result[k]%10;
+        }
+
+        //Build the string
         StringBuilder sb = new StringBuilder();
-
-        int s = 0;
-
-        for(int i = 0 ;  i < result.length ; i++){
-
-            if (result[idx] != 0) {
-
-                s = idx;
-                break;
-                
-            }
-
+        for(int digit : result){
+            if(sb.length() == 0 && digit == 0) continue; //skip the leading zeroes
+            sb.append(digit);
         }
 
-        for(int i = s ; i < result.length ; i++){
-
-            sb.append(result[i]);
-
-        }
-
-        String str = sb.toString();
-
-
-        return str;
-
-
-
-        
-    }
-
-
-    public static void main(String[] args) {
-        
-        MultiplyStrings mm = new MultiplyStrings();
-
-        String num1 = "123";
-        String num2 = "456";
-
-        String ans = mm.multiply(num1, num2);
-
-        System.out.println(ans);
-
+        return sb.toString();
     }
 }
