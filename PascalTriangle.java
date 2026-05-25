@@ -1,64 +1,29 @@
-import java.util.ArrayList;
-
-import java.util.List;
+package ArrayI;
+import java.util.*;
 
 public class PascalTriangle {
-
-    public static int factorial(int num) {
-        if (num == 0 || num == 1) {
-            return 1;
-        }
-        return num * factorial(num - 1);
-    }
-    
-    // Method to calculate nCr
-    public static int nCr(int n, int r) {
-        if (r > n) {
-            return 0; // nCr is not defined for r > n
-        }
-        return factorial(n) / (factorial(r) * factorial(n - r))
-    }
-
-    
     public List<List<Integer>> generate(int numRows) {
+        // Ok so intution is that each above row in the triangle is the sum of 
+        // the two adjacent elements
+        int n = numRows;
+        List<List<Integer>> result = new ArrayList<>();
 
-        // See the pattern that u are observing here in which the triangle is upto the given number of rows and 
-        // the numbers inside each list is the nCr value of the given thing 
-
-        List<List<Integer>> list = new ArrayList<>();
-
-        for(int i = 0 ; i < numRows ; i++){
-
+        for(int r = 0 ; r < n ; r++){
             List<Integer> lst = new ArrayList<>();
-
-            for(int j = 0 ; j <= i ; j++){
-
-                if (j <= i) {
-
-                    lst.add(nCr(i, j));
-                    
+            for(int c = 0 ; c <= r ; c++){
+                if (c == 0 || c == r) { //as at the beginning and the end there is 1
+                    lst.add(1);
+                }else{
+                    int prev1 = result.get(r-1).get(c-1);
+                    int prev2 = result.get(r-1).get(c);
+                    lst.add(prev1+prev2);
                 }
-
             }
-
-            list.add(lst);
+            result.add(lst);
         }
 
-
-
-        
-        return list;
-    }
-
-    public static void main(String[] args) {
-        
-        PascalTriangle pt = new PascalTriangle();
-
-        int numOfRows = 5;
-
-        List<List<Integer>> ans = pt.generate(numOfRows);
-
-        System.out.println(ans);
+        return result;
 
     }
+
 }
