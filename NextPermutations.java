@@ -1,96 +1,55 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+package ArrayI;
+import java.util.*;
 
 public class NextPermutations {
-
-    public void helpr(int[] nums , boolean[] freq , List<List<Integer>> list , List<Integer> lst){
-
-        if (lst.size() == nums.length) {
-
-            list.add(new ArrayList<>(lst));
-            return;
-            
-        }
-
-
-        for(int i = 0 ; i < nums.length ; i++)
-
-            if (!freq[i]) {
-
-                freq[i] = true;
-                lst.add(nums[i]);
-                helpr(nums, freq, list, lst);
-                lst.remove(lst.size()-1);
-                freq[i] = false;
-                
-            }
-
-        }
-
-    }
     
     public void nextPermutation(int[] nums) {
-
-        List<Integer> toFind = new ArrayList<>();
-
-        for(int i = 0 ; i < nums.length ; i++){
-
-            toFind.add(nums[i]);
-
-        }
-
-        boolean[] freq = new boolean[nums.length];
-        List<List<Integer>> list = new ArrayList<>();
-        List<Integer> lst = new ArrayList<>();
-        Arrays.sort(nums);
-
-        helpr(nums, freq, list, lst);
-
-        int idx = 0;
-
-        for(int j = 0 ; j < list.size() ; j++){
-
-            if (list.get(j).equals(toFind)) {
-
-                idx = j;
+        int n = nums.length;
+        int idx = -1;
+        // Finding the breaking point
+        for(int i = 0 ; i < n-1 ; i++){
+            if (nums[i] < nums[i+1]) {
+                idx = i;
                 break;
-                
             }
-
         }
 
-        // converting the given nums to the next permutation
-        for(int i = 0 ; i < nums.length ; i++){
-
-            if(idx == list.size()-1){
-
-                nums[i] = list.get(0).get(i);
-
-            }else{
-
-                nums[i] = list.get(idx+1).get(i);
-
-            }
-
+        if (idx != -1) {
             
-
+        int sdx = -1;
+        for(int j = n-1 ; j >= 0 ; j--){
+            if (nums[j] > nums[idx]) {
+                sdx = j;
+                break;
+            }
         }
 
+        int temp = nums[idx];
+        nums[idx] = nums[sdx];
+        nums[sdx] = temp;
 
-        
+        List<Integer> lst = new ArrayList<>();
+        for(int i = idx ; i < n ; i++){
+            lst.add(nums[i]);
+        }
+        Collections.sort(lst);
+
+        int ldx = 0;
+        for(int i = idx ; i < n ; i++){
+            nums[i] = lst.get(ldx) ;
+            ldx++;
+        }
+    }else{
+        List<Integer> lst = new ArrayList<>();
+        for(int i = 0 ; i < n ; i++){
+            lst.add(nums[i]);
+        }
+        Collections.reverse(lst);
+        for(int j = 0 ; j < n ; j++){
+            nums[j] = lst.get(j);
+        }
+    }
     }
 
-    public static void main(String[] args) {
-        
-        NextPermutations np = new NextPermutations();
-
-        int[] nums = {1,1,5};
-
-        np.nextPermutation(nums);
-
-        System.out.println(Arrays.toString(nums));
-
-
-    }
+    
 }
