@@ -1,89 +1,48 @@
+package ArrayProb;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+
+
 import java.util.List;
 
 public class ThreeSum {
-
-
     public List<List<Integer>> threeSum(int[] nums) {
-
-        // The Optimal approach
-        //Firstly sort the given array then use some pointers
-        // first fix a pointer at idx  then left at idx+1 and right at nums.length-1
-
-        List<List<Integer>> list = new ArrayList<>();
+        int n = nums.length;
         Arrays.sort(nums);
+        // See in three sum problem it is specifically mentioned that the sum of
+        // the three elements sum up to zero!!!!!!!
+        // nums[r]+nums[l] = -nums[i]
+        // the above eq is my thought process
+        List<List<Integer>> result = new ArrayList<>();
+        // Since array is sorted, duplicates are always neighbors. So just peek at your neighbor — if same value, skip!
+        
+        for(int i = 0 ; i < n ; i++){
+            int target = -nums[i];  //Make one triplet fixed!!!!!
+            int l = i+1;  //The initialise should be like this so that l & i are different
+            int r = n-1;
 
-        for(int i = 0 ; i < nums.length ; i++){
-
-            if (i > 0 && nums[i] == nums[i-1]) {
-
-                continue;
-                
+            if(i > 0 && nums[i] == nums[i-1]) continue;   //Skipping duplicate i
+            
+            while (l < r) {
+                int sum = nums[l]+nums[r];
+                if (sum == target) { //→ only this runs, pointers STAY
+                    List<Integer> lst = Arrays.asList(nums[i],nums[l],nums[r]);
+                    result.add(lst);
+                    //Skipping duplicate l and r
+                    while(l < r && nums[l] == nums[l+1])l++;
+                    while(l < r && nums[r] == nums[r-1])r--;
+                    l++; //final move!!!!
+                    r--; //final move!!!!
+                }else if (sum < target) {
+                    l++;
+                }else{
+                    r--;
+                }
             }
 
-
-            int j = i + 1;        // second pointer
-            int k = nums.length-1;
-
-
-            while (j < k) {
-
-                int sum = nums[i]+nums[j]+nums[k];
-
-                if (sum < 0) {
-
-                    j++;
-                    
-                }
-
-                else if(sum > 0){
-
-                    k--;
-
-                }
-
-                else{
-
-                    List<Integer> lst = new ArrayList<>();
-
-                    lst.add(nums[i]);
-                    lst.add(nums[j]);
-                    lst.add(nums[k]);
-
-                    list.add(lst);
-
-                    j++;
-                    k--;
-
-                    while (j < k && nums[j] == nums[j-1]) {
-
-                        j++;
-                        
-                    }
-
-                    while (j < k && nums[k] == nums[k+1]) {
-
-                        k--;
-                        
-                    }
-                }
-                
-            }
         }
-  
-        return list;
-        
-    }
 
-    public static void main(String[] args) {
-        
-        ThreeSum ts = new ThreeSum();
-
-        int[] nums = {-1,0,1,2,-1,-4};
-
-        List<List<Integer>> lst = ts.threeSum(nums);
-
-        System.out.println(lst);
+        return result;
     }
 }
