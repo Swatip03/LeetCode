@@ -1,38 +1,36 @@
+package DynamicProgramming;
+
+import java.util.Arrays;
+
 public class JumpGame {
-    
     public boolean canJump(int[] nums) {
-
-        // See in the problem the elements that are given to u in the array represent the number of idx it can jump to go to the last index
-
-        // One observation is that if the 0 element is not present in the array then the ans will always be true
-        int maxIdx = 0;
-
-        for(int i = 0 ; i < nums.length ; i++){
-
-            if (i > maxIdx) {
-
-                return false;
-                
-            }
-
-            maxIdx = Math.max(maxIdx, i + nums[i]);
-
-        }
-
-        return true;
-        
+        int idx = 0;
+        int[] memo = new int[nums.length];
+        Arrays.fill(memo, -1);
+        return solve(nums, memo , idx);
     }
 
-    public static void main(String[] args) {
-        
-        JumpGame jg = new JumpGame();
+    public boolean solve(int[] nums,int[] memo , int idx) {
+        if (idx >= nums.length - 1) { // Reached to last or pass thru last idx
+            return true;
+        }
 
-        int[] nums = {3,2,1,0,4};
+        if (nums[idx] == 0) { // U are stuck
+            return false;
+        }
 
-        boolean ans = jg.canJump(nums);
+        if (memo[idx] != -1) {
+            return memo[idx] == 1;
+        }
 
-        System.out.println(ans);
+        for (int jump = 1; jump <= nums[idx]; jump++) { // 0 <= j <= nums[i]
+            if (solve(nums,memo, idx + jump)) {
+                memo[idx] = 1;
+                return true;
+            }
+        }
 
-
+        memo[idx] = 0;
+        return false;
     }
 }
